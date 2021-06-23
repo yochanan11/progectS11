@@ -1,0 +1,46 @@
+﻿@model progectS.VModel.VMAddMealOfPlane
+
+@{
+    ViewData["Title"] = "הוספת ארוחה";
+}
+
+<h1>@Model.Day.DayName</h1>
+
+<h4>הוספת ארוחה</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddMeal">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="UserID" hidden="hidden" />
+            <input asp-for="DayID" hidden="hidden" />
+            
+           
+            <div class="form-group">
+                <label asp-for="TypeId" class="control-label"></label>
+                <select asp-for="TypeId" class="form-control">
+                    @foreach (TypeOfMeal type in Model.TypeOfMeals)
+                    {
+                        <option value="@type.Id">@type.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="TypeId" class="text-danger"></span>
+            </div>
+            <a asp-action="AddType">הוספת סוג ארוחה שאינו  מופיע ברשימה</a>
+
+
+            <div class="form-group">
+                <input type="submit" value="הוסף" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>|
+    
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

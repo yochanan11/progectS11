@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - מערכת בריאות</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link href="~/lib/bootstrap-v4-rtl/bootstrap-v4-rtl/bootstrap-v4-rtl/dist/css/bootstrap-rtl.css" rel="stylesheet" />
+    <link href="~/lib/glyphicons-only-bootstrap/glyphicons-only-bootstrap/glyphicons-only-bootstrap/css/bootstrap.css" rel="stylesheet" />
+</head>
+<body dir="rtl" style="background-color:#b1df62">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">מערכת הבריאות שלי</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">דף הבית</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+
+                        @if (DAL.Get.User.FirstName != "התחבר")
+                        {
+                            @if (DAL.Get.Planes.ToList().Count > 0)
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                                        התוכניות שלי
+                                    </a>
+                                    <div class="dropdown-menu">
+
+                                        @foreach (Plane plane in DAL.Get.Planes.ToList().FindAll(p => p.User.ID == DAL.Get.User.ID))
+                                        {
+                                            <a class="dropdown-item" asp-controller="Plane" asp-action="Details" asp-route-id="@plane.ID">
+                                                @plane.Name
+                                            </a>
+                                        }
+                                    </div>
+                                </li>
+                            }
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="ToDay">מה אכלתי היום?</a>
+                            </li>
+                        }
+
+                        @if (DAL.Get.User.FirstName == "התחבר")
+                        {
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Connect">
+                                    <span class="glyphicon glyphicon-log-in" aria-hidden="true">@DAL.Get.User.FuulName</span>
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="SohuUser">
+                                    <span class="glyphicon glyphicon-user" aria-hidden="true">@DAL.Get.User.FuulName</span>
+                                </a>
+                            </li>
+                        }
+
+                        @if (DAL.Get.User.FirstName != "התחבר")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="UnConnect">
+                                    <span class="glyphicon glyphicon-log-out" aria-hidden="true">התנתק</span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2021 - הבריאות שלנו - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/connect.js"></script>
+    <script src="~/js/Chart.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

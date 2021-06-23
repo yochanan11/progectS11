@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+<div id="caart_container" style="width:400px;height:400px;border:1px solid #ddd;padding:1px;border-radius:4px">
+    <canvas id="bar-chart"></canvas>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script>
+    var Proteins =@Html.Raw(ViewBag.Proteins);
+    var caloris =@Html.Raw(ViewBag.caloris);
+    var Carbohydrates =@Html.Raw(ViewBag.Carbohydrates);
+    var ctx = $("#bar-chart");
+    var barChart = new Chart(ctx, {
+        type: 'bar',
+        date: {
+            labels: caloris
+            datasets[{
+                label: "Proteins",
+                data: Proteins,
+                borderColor: 'red',
+                fill: false
+            },
+            
+            {
+                label: "caloris",
+                data: caloris,
+                borderColor: 'green',
+                fill: false
+            },
+            {
+                label: "Carbohydrates",
+                data: caloris,
+                borderColor: 'blue',
+                fill: false
+            },] 
+            
+         },
+        options: {
+            legend: { display: false }
+        }
+       
+
+
+
+
+
+    });
+
+</script>

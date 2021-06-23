@@ -1,0 +1,144 @@
+﻿@model progectS.VModel.VMPlaneDetails
+<div style="background-image:url(~/../../wwwroot/img/unnamed.png)">
+    <div onload="load()">
+
+
+        <h4>@Model.Plane.Name</h4>
+        <hr />
+        <a class="btn btn-outline-success" asp-action="Deshbord" asp-controller="user" asp-route-id="@Model.Plane.ID">מה המצב שלי</a>
+        <dl class="row">
+
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Plane.Date)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Plane.Date)
+            </dd>
+        </dl>
+    </div>
+    <div>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Plane.ID }) |
+        <a asp-action="ShowPlanes" asp-route-id="@Model.Plane.User.ID">בחזרה לתוכניות</a>
+    </div>
+    <div class="content">
+        <div class="card">
+            <div class="card-header">
+                המצב בתוכנית
+            </div>
+            <div class="aside" style=" width:100%;max-width:500px">
+                <canvas id="myChart" style="width:100%;max-width:450px"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="aside" style=" width:100%;max-width:550px">
+        <div class="card">
+            <div class="card-header">
+                המצב בפועל
+            </div>
+            <div class="aside" style=" width:100%;max-width:500px">
+                <canvas id="myChart1" style="width:100%;max-width:450px"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <hr />
+    @if (Model.Plane.Days.Count > 0)
+    {
+        <h4>  פירוט שבועי </h4>
+        <table class="table table-success text-center">
+            <thead>
+                <tr class=" text-center">
+                    <th class="text-center">תאריך</th>
+                    <th class="text-center">יום</th>
+                    <th class="text-center"></th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @foreach (Day item in Model.Plane.Days)
+                {
+
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Date)</td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DayName)
+                        </td>
+                        <td>
+                            @Html.ActionLink("הצג ארוחות", "DaylDetails", new { id = item.ID })
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    }
+    <br />
+    <br />
+    <br />
+</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
+
+    <script>
+
+     var Proteins =@Html.Raw(Json.Serialize (ViewBag.Proteins));
+     var caloris =@Html.Raw(Json.Serialize (ViewBag.caloris));
+     var Carbohydrates =@Html.Raw(Json.Serialize (ViewBag.Carbohydrates));
+     var ProteinsToday =@Html.Raw(Json.Serialize (ViewBag.ProteinsToday));
+     var calorisToday =@Html.Raw(Json.Serialize (ViewBag.calorisToday));
+     var CarbohydratesToday =@Html.Raw(Json.Serialize (ViewBag.CarbohydratesToday));
+        var Days =@Html.Raw(Json.Serialize (ViewBag.Days));
+
+        var xValues = Days;
+
+             new Chart("myChart", {
+        type: "line",
+        data: {
+             labels: xValues,
+            datasets: [{
+                data: Proteins,
+                borderColor: "red",
+                fill: false
+            }, {
+                data: caloris,
+                borderColor: "green",
+                fill: false
+            }, {
+                data: Carbohydrates,
+                borderColor: "blue",
+                fill: false
+            }]
+        },
+        options: {
+             legend: { display: false }
+             }
+             });
+        var xValues = Days;
+
+    new Chart("myChart1", {
+        type: "line",
+        data: {
+            labels: xValues,
+            datasets: [{
+                data: ProteinsToday,
+                borderColor: "red",
+                fill: false
+            }, {
+                data: calorisToday,
+                borderColor: "green",
+                fill: false
+            }, {
+                data: CarbohydratesToday,
+                borderColor: "blue",
+                fill: false
+            }]
+        },
+        options: {
+            legend: { display: false }
+        }
+    });
+
+    </script>
